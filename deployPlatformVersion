@@ -1,0 +1,25 @@
+timestamps {
+    node ('master') {
+        def jobs = ""
+        hudson.model.Hudson.getInstance().getItems().each {
+            if (it.getName() == "beaware-project") {
+              it.getAllJobs().each {
+                if (it.getFullName().contains("${BRANCH}")) {
+                      jobs += it.getFullName() + "\n"
+                }
+              }
+            }
+        }
+        jobs.trim().split('\n').each {
+            def buildjob
+            if ("${JOB_SYNC}" == "synchronized") {
+                buildjob = build job: "${it}", propagate: false
+                result = buildjob.result
+                echo "Build of ${it} returned result: ${result}."
+            }
+            else {
+                buildjob = build job: "${it}", propagate: false, wait: false
+            }
+        }
+    }
+}
