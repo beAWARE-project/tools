@@ -2,7 +2,7 @@ timestamps {
     node ('master') {
         def jobs = ""
         hudson.model.Hudson.getInstance().getItems().each {
-            if (it.getName() == "beaware-project") {
+            if (it.getName() == "beaware-project" || it.getName() == "beAWARE-IOSB") {
               it.getAllJobs().each {
                 if (it.getFullName().contains("${BRANCH}")) {
                       jobs += it.getFullName() + "\n"
